@@ -1,47 +1,39 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
+    "title": "Inject.Today API",
+    "description": "API for retrieving and updating version and exploit data for Inject.Today.",
+    "version": "1.0.0",
     "license": {
       "name": "MIT"
-    },
-    "version": "1.0.0"
+    }
   },
   "servers": [
     {
-      "url": "http://sandbox.mintlify.com"
-    }
-  ],
-  "security": [
-    {
-      "bearerAuth": []
+      "url": "https://inject.today"
     }
   ],
   "paths": {
-    "/plants": {
+    "/api/versions/current": {
       "get": {
-        "description": "Returns all plants from the system that the user has access to",
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of results to return",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
+        "summary": "Current",
+        "description": "Returns the current versions of Roblox.",
         "responses": {
           "200": {
-            "description": "Plant response",
+            "description": "Current Roblox versions.",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
+                  "$ref": "#/components/schemas/VersionsResponse"
+                },
+                "example": {
+                  "Windows": {
+                    "Version": "version-bef193a8f3d14d3c",
+                    "Date": "3/17/2025 4:04:55 PM"
+                  },
+                  "Macintosh": {
+                    "Version": "version-0b638b32e4ac485c",
+                    "Date": "3/17/2025 4:04:32 PM"
                   }
                 }
               }
@@ -58,33 +50,35 @@
             }
           }
         }
-      },
-      "post": {
-        "description": "Creates a new plant in the store",
-        "requestBody": {
-          "description": "Plant to add to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
-          },
-          "required": true
-        },
+      }
+    },
+    "/api/versions/future": {
+      "get": {
+        "summary": "Future",
+        "description": "Returns the future versions of Roblox.",
         "responses": {
           "200": {
-            "description": "plant response",
+            "description": "Future Roblox versions.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Plant"
+                  "$ref": "#/components/schemas/VersionsResponse"
+                },
+                "example": {
+                  "Windows": {
+                    "Version": "version-xyz456789",
+                    "Date": "3/20/2025 10:14:55 AM"
+                  },
+                  "Macintosh": {
+                    "Version": "version-123abc789xyz",
+                    "Date": "3/20/2025 10:14:32 AM"
+                  }
                 }
               }
             }
           },
           "400": {
-            "description": "unexpected error",
+            "description": "Unexpected error",
             "content": {
               "application/json": {
                 "schema": {
@@ -96,28 +90,108 @@
         }
       }
     },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of plant to delete",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
+    "/api/cheats": {
+      "get": {
+        "summary": "Cheats",
+        "description": "Returns detailed data for all cheats available on Inject.Today, including platform information, pricing, detection status, and reviews.",
         "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
+          "200": {
+            "description": "List of cheats with detailed information.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "patternProperties": {
+                    "^[A-Za-z0-9_-]+$": {
+                      "$ref": "#/components/schemas/Cheat"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "example": {
+                  "Severe": {
+                    "Identifier": "xJaK2vrMde",
+                    "Tags": {
+                      "Windows": {
+                        "Rank": "Reputable",
+                        "Parent": "Cheats"
+                      }
+                    },
+                    "Attributes": {
+                      "Windows": {
+                        "Score": 95,
+                        "Resellers": false,
+                        "Type": "External",
+                        "Access": "Usermode",
+                        "PricingModel": [
+                          "Lifetime"
+                        ],
+                        "ReleaseDate": "06/2021"
+                      }
+                    },
+                    "Cost": {
+                      "Windows": "$20 Lifetime"
+                    },
+                    "Visibility": {
+                      "Windows": {
+                        "Website": true,
+                        "Updates": true,
+                        "Reviews": true,
+                        "Settings": true
+                      }
+                    },
+                    "Links": {
+                      "Windows": {
+                        "Discord": "https://discord.com/invite/severe1",
+                        "Purchase": "https://discord.com/invite/severe1"
+                      }
+                    },
+                    "Platforms": {
+                      "Windows": {
+                        "Detection": {
+                          "Raw": 0,
+                          "Readable": "Fully undetected"
+                        },
+                        "Tracked": true,
+                        "Versions": {
+                          "Software": "None",
+                          "Roblox": "None"
+                        }
+                      }
+                    },
+                    "Name": "Severe",
+                    "Update": {
+                      "Platforms": {
+                        "Windows": {
+                          "Timestamp": "2025-10-10T21:20:11.580Z"
+                        }
+                      }
+                    },
+                    "Reviews": [
+                      {
+                        "Identifier": "3D70S2",
+                        "Author": "1237865177605738546",
+                        "Rating": 5,
+                        "Comment": "Severe has always been my number 1 external for ages...",
+                        "Timestamp": 1760131972308,
+                        "Parent": "Severe"
+                      },
+                      {
+                        "Identifier": "3D711E",
+                        "Author": "886038109530239036",
+                        "Rating": 5,
+                        "Comment": "One of the best externals I have used...",
+                        "Timestamp": 1760133568531,
+                        "Parent": "Severe"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
           },
           "400": {
-            "description": "unexpected error",
+            "description": "Unexpected error",
             "content": {
               "application/json": {
                 "schema": {
@@ -128,25 +202,76 @@
           }
         }
       }
-    }
-  },
-  "webhooks": {
-    "/plant/webhook": {
+    },
+    "/api/update": {
       "post": {
-        "description": "Information about a new plant added to the store",
+        "summary": "Update Versions",
+        "description": "Updates version information for Roblox and Inject.Today software. Requires authorization.",
+        "security": [
+          {
+            "cheatAuth": []
+          }
+        ],
         "requestBody": {
-          "description": "Plant added to the store",
+          "description": "Version update payload.",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewPlant"
+                "$ref": "#/components/schemas/UpdateRequest"
+              },
+              "example": {
+                "Versions": {
+                  "Roblox": "version-abcdef123456",
+                  "Software": "v2.4.1",
+                  "Changelog": "Fixed compatibility issues and improved stability."
+                }
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Return a 200 status to indicate that the data was received successfully"
+            "description": "Version update successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "success": true,
+                    "message": "Version data updated successfully."
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized. Missing or invalid Authorization header.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request payload.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
         }
       }
@@ -154,63 +279,117 @@
   },
   "components": {
     "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
+      "PlatformVersion": {
         "type": "object",
         "properties": {
-          "name": {
-            "description": "The name of the plant",
-            "type": "string"
+          "Version": {
+            "type": "string",
+            "description": "Version identifier."
           },
-          "tag": {
-            "description": "Tag to specify the type",
-            "type": "string"
+          "Date": {
+            "type": "string",
+            "description": "Date/time when this version was recorded."
+          }
+        },
+        "required": [
+          "Version",
+          "Date"
+        ]
+      },
+      "VersionsResponse": {
+        "type": "object",
+        "properties": {
+          "Windows": {
+            "$ref": "#/components/schemas/PlatformVersion"
+          },
+          "Macintosh": {
+            "$ref": "#/components/schemas/PlatformVersion"
           }
         }
       },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
+      "Exploit": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
           },
-          {
-            "required": [
-              "id"
-            ],
+          "name": {
+            "type": "string"
+          },
+          "platforms": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "version": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "downloadUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "lastUpdated": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "UpdateRequest": {
+        "type": "object",
+        "properties": {
+          "Versions": {
             "type": "object",
             "properties": {
-              "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
+              "Roblox": {
+                "type": "string"
+              },
+              "Software": {
+                "type": "string"
+              },
+              "Changelog": {
+                "type": "string"
               }
-            }
+            },
+            "required": [
+              "Roblox",
+              "Software"
+            ]
           }
+        },
+        "required": [
+          "Versions"
         ]
       },
       "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
         "type": "object",
         "properties": {
           "error": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "message": {
             "type": "string"
           }
-        }
+        },
+        "required": [
+          "error",
+          "message"
+        ]
       }
     },
     "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer"
+      "cheatAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization",
+        "description": "Cheat authentication header of the form `Cheat <token>`, where `<token>` is your auth token."
       }
     }
   }
