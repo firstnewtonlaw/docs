@@ -275,6 +275,156 @@
           }
         }
       }
+    },
+    "/api/cheats/reviews": {
+      "get": {
+        "summary": "Cheat Reviews",
+        "description": "Returns reviews for all cheats available on Inject.Today.",
+        "responses": {
+          "200": {
+            "description": "List of reviews for all cheats.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "patternProperties": {
+                    "^[A-Za-z0-9_-]+$": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Review"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cheats/reviews/{idOrName}": {
+      "get": {
+        "summary": "Cheat Reviews by ID or Name",
+        "description": "Returns reviews for a specific cheat by ID or name.",
+        "parameters": [
+          {
+            "name": "idOrName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The cheat identifier or name"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of reviews for the specified cheat.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Review"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cheats/updates": {
+      "get": {
+        "summary": "Cheat Updates",
+        "description": "Returns update information for all cheats available on Inject.Today.",
+        "responses": {
+          "200": {
+            "description": "List of updates for all cheats.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "patternProperties": {
+                    "^[A-Za-z0-9_-]+$": {
+                      "$ref": "#/components/schemas/Update"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cheats/updates/{idOrName}": {
+      "get": {
+        "summary": "Cheat Updates by ID or Name",
+        "description": "Returns update information for a specific cheat by ID or name.",
+        "parameters": [
+          {
+            "name": "idOrName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The cheat identifier or name"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Update information for the specified cheat.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Update"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -382,6 +532,102 @@
           "error",
           "message"
         ]
+      },
+      "Review": {
+        "type": "object",
+        "properties": {
+          "Identifier": {
+            "type": "string",
+            "description": "Unique review identifier."
+          },
+          "Author": {
+            "type": "string",
+            "description": "User ID of the review author."
+          },
+          "Rating": {
+            "type": "integer",
+            "description": "Review rating (1-5).",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "Comment": {
+            "type": "string",
+            "description": "Review comment text."
+          },
+          "Timestamp": {
+            "type": "integer",
+            "description": "Unix timestamp of when the review was posted."
+          },
+          "Parent": {
+            "type": "string",
+            "description": "The cheat name that this review is for."
+          }
+        },
+        "required": [
+          "Identifier",
+          "Author",
+          "Rating",
+          "Comment",
+          "Timestamp",
+          "Parent"
+        ]
+      },
+      "Update": {
+        "type": "object",
+        "properties": {
+          "Platforms": {
+            "type": "object",
+            "description": "Update information by platform.",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "Timestamp": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "When the cheat was last updated on this platform."
+                }
+              }
+            }
+          }
+        }
+      },
+      "Cheat": {
+        "type": "object",
+        "properties": {
+          "Identifier": {
+            "type": "string"
+          },
+          "Name": {
+            "type": "string"
+          },
+          "Tags": {
+            "type": "object"
+          },
+          "Attributes": {
+            "type": "object"
+          },
+          "Cost": {
+            "type": "object"
+          },
+          "Visibility": {
+            "type": "object"
+          },
+          "Links": {
+            "type": "object"
+          },
+          "Platforms": {
+            "type": "object"
+          },
+          "Update": {
+            "$ref": "#/components/schemas/Update"
+          },
+          "Reviews": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Review"
+            }
+          }
+        }
       }
     },
     "securitySchemes": {
