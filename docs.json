@@ -3,9 +3,9 @@
   "theme": "mint",
   "name": "Inject",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#9ca3af",
+    "light": "#9ca3af",
+    "dark": "#6b7280"
   },
   "favicon": "/favicon.svg",
   "navigation": {
@@ -24,7 +24,10 @@
             "pages": [
               "api-reference/endpoint/current",
               "api-reference/endpoint/future",
-              "api-reference/endpoint/cheats"
+              "api-reference/endpoint/previous",
+              "api-reference/endpoint/cheats",
+              "api-reference/endpoint/reviews",
+              "api-reference/endpoint/updates"
             ]
           },
           {
