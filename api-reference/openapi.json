@@ -90,6 +90,44 @@
         }
       }
     },
+    "/api/versions/previous": {
+      "get": {
+        "summary": "Previous",
+        "description": "Returns the previous versions of Roblox.",
+        "responses": {
+          "200": {
+            "description": "Previous Roblox versions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionsResponse"
+                },
+                "example": {
+                  "Windows": {
+                    "Version": "version-689e359b09ad43b0",
+                    "Date": "2026-04-09T00:52:39.162Z"
+                  },
+                  "Macintosh": {
+                    "Version": "version-08d2b9589bf14135",
+                    "Date": "2026-04-09T00:40:09.943Z"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/cheats": {
       "get": {
         "summary": "Cheats",
@@ -123,9 +161,7 @@
                         "Resellers": false,
                         "Type": "External",
                         "Access": "Usermode",
-                        "PricingModel": [
-                          "Lifetime"
-                        ],
+                        "PricingModel": ["Lifetime"],
                         "ReleaseDate": "06/2021"
                       }
                     },
@@ -175,17 +211,211 @@
                         "Comment": "Severe has always been my number 1 external for ages...",
                         "Timestamp": 1760131972308,
                         "Parent": "Severe"
-                      },
-                      {
-                        "Identifier": "3D711E",
-                        "Author": "886038109530239036",
-                        "Rating": 5,
-                        "Comment": "One of the best externals I have used...",
-                        "Timestamp": 1760133568531,
-                        "Parent": "Severe"
                       }
                     ]
                   }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cheats/reviews": {
+      "get": {
+        "summary": "Cheat Reviews",
+        "description": "Returns reviews for all cheats available on Inject.Today.",
+        "responses": {
+          "200": {
+            "description": "Map of cheat names to their review collections.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "patternProperties": {
+                    "^[A-Za-z0-9_-]+$": {
+                      "$ref": "#/components/schemas/CheatReviews"
+                    }
+                  }
+                },
+                "example": {
+                  "Blueberry": {
+                    "Identifier": "UdfCYb5qPZ",
+                    "Reviews": [
+                      {
+                        "Author": "1lpbjhtqcq",
+                        "Parent": "Blueberry",
+                        "Rating": 3,
+                        "Comment": "bsod on hop for me",
+                        "Summary": "Bad",
+                        "Platform": "Windows",
+                        "Timestamp": 1773363151668,
+                        "Categories": [
+                          {
+                            "Rating": 3,
+                            "Comment": "bsod on hop for me",
+                            "Summary": "Bad",
+                            "Category": "Overall"
+                          }
+                        ],
+                        "Identifier": "3L3L1T"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cheats/reviews/{idOrName}": {
+      "get": {
+        "summary": "Cheat Reviews by ID or Name",
+        "description": "Returns reviews for a specific cheat by ID or name.",
+        "parameters": [
+          {
+            "name": "idOrName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The cheat identifier or name."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Review collection for the specified cheat.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheatReviews"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cheats/updates": {
+      "get": {
+        "summary": "Cheat Updates",
+        "description": "Returns update information for all cheats available on Inject.Today.",
+        "responses": {
+          "200": {
+            "description": "Map of cheat names to their update history.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "patternProperties": {
+                    "^[A-Za-z0-9_-]+$": {
+                      "$ref": "#/components/schemas/CheatUpdates"
+                    }
+                  }
+                },
+                "example": {
+                  "Blueberry": {
+                    "Identifier": "UdfCYb5qPZ",
+                    "Update": {
+                      "Metadata": [],
+                      "Platforms": {
+                        "Windows": {
+                          "Timestamp": "2026-01-26T18:02:03.338Z"
+                        }
+                      }
+                    }
+                  },
+                  "Bunni": {
+                    "Identifier": "hTiLNnYKiU",
+                    "Update": {
+                      "Metadata": [
+                        {
+                          "Platform": "Windows",
+                          "Versions": {
+                            "Roblox": "version-d34359a5577645e2",
+                            "Software": "2.3.6"
+                          },
+                          "Changelog": "[*] sUNC 98%\n[*] Rewrote way to much\n[*] UPDATED FOR version-d34359a5577645e2"
+                        }
+                      ],
+                      "Platforms": {
+                        "Windows": {
+                          "Timestamp": "2026-02-10T14:30:00.000Z"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cheats/updates/{idOrName}": {
+      "get": {
+        "summary": "Cheat Updates by ID or Name",
+        "description": "Returns update information for a specific cheat by ID or name.",
+        "parameters": [
+          {
+            "name": "idOrName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The cheat identifier or name."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Update information for the specified cheat.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheatUpdates"
                 }
               }
             }
@@ -275,156 +505,6 @@
           }
         }
       }
-    },
-    "/api/cheats/reviews": {
-      "get": {
-        "summary": "Cheat Reviews",
-        "description": "Returns reviews for all cheats available on Inject.Today.",
-        "responses": {
-          "200": {
-            "description": "List of reviews for all cheats.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "patternProperties": {
-                    "^[A-Za-z0-9_-]+$": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Review"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/cheats/reviews/{idOrName}": {
-      "get": {
-        "summary": "Cheat Reviews by ID or Name",
-        "description": "Returns reviews for a specific cheat by ID or name.",
-        "parameters": [
-          {
-            "name": "idOrName",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "The cheat identifier or name"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "List of reviews for the specified cheat.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Review"
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/cheats/updates": {
-      "get": {
-        "summary": "Cheat Updates",
-        "description": "Returns update information for all cheats available on Inject.Today.",
-        "responses": {
-          "200": {
-            "description": "List of updates for all cheats.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "patternProperties": {
-                    "^[A-Za-z0-9_-]+$": {
-                      "$ref": "#/components/schemas/Update"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/cheats/updates/{idOrName}": {
-      "get": {
-        "summary": "Cheat Updates by ID or Name",
-        "description": "Returns update information for a specific cheat by ID or name.",
-        "parameters": [
-          {
-            "name": "idOrName",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "The cheat identifier or name"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Update information for the specified cheat.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Update"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {
@@ -441,10 +521,7 @@
             "description": "Date/time when this version was recorded."
           }
         },
-        "required": [
-          "Version",
-          "Date"
-        ]
+        "required": ["Version", "Date"]
       },
       "VersionsResponse": {
         "type": "object",
@@ -457,40 +534,173 @@
           }
         }
       },
-      "Exploit": {
+      "ReviewCategory": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "platforms": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "version": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "downloadUrl": {
+          "Category": {
             "type": "string",
-            "format": "uri"
+            "description": "The category being reviewed (e.g. Combat, Visuals, Overall)."
           },
-          "lastUpdated": {
+          "Rating": {
+            "type": "number",
+            "description": "Rating for this category (1-5).",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "Comment": {
             "type": "string",
-            "format": "date-time"
+            "description": "Comment for this category."
+          },
+          "Summary": {
+            "type": "string",
+            "description": "Short verdict label.",
+            "enum": ["Bad", "Decent", "Good"]
+          },
+          "Media": {
+            "type": "string",
+            "description": "Optional media filename attached to this category review."
           }
         },
-        "required": [
-          "id",
-          "name"
-        ]
+        "required": ["Category", "Rating", "Comment"]
+      },
+      "Review": {
+        "type": "object",
+        "properties": {
+          "Identifier": {
+            "type": "string",
+            "description": "Unique review identifier."
+          },
+          "Author": {
+            "type": "string",
+            "description": "User ID of the review author."
+          },
+          "Parent": {
+            "type": "string",
+            "description": "The cheat name this review belongs to."
+          },
+          "Platform": {
+            "type": "string",
+            "description": "Platform the review was submitted for.",
+            "enum": ["Windows", "Macintosh"]
+          },
+          "Rating": {
+            "type": "number",
+            "description": "Overall rating (1-5).",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "Comment": {
+            "type": "string",
+            "description": "Overall review comment."
+          },
+          "Summary": {
+            "type": "string",
+            "description": "Short overall verdict.",
+            "enum": ["Bad", "Decent", "Good"]
+          },
+          "Timestamp": {
+            "type": "integer",
+            "description": "Unix timestamp in milliseconds of when the review was posted."
+          },
+          "Categories": {
+            "type": "array",
+            "description": "Per-category breakdown of the review.",
+            "items": {
+              "$ref": "#/components/schemas/ReviewCategory"
+            }
+          },
+          "Media": {
+            "type": "string",
+            "description": "Optional media filename attached to the overall review."
+          }
+        },
+        "required": ["Identifier", "Author", "Parent", "Platform", "Rating", "Comment", "Timestamp", "Categories"]
+      },
+      "CheatReviews": {
+        "type": "object",
+        "properties": {
+          "Identifier": {
+            "type": "string",
+            "description": "Unique cheat identifier."
+          },
+          "Reviews": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Review"
+            }
+          }
+        },
+        "required": ["Identifier", "Reviews"]
+      },
+      "UpdateMetadataEntry": {
+        "type": "object",
+        "properties": {
+          "Platform": {
+            "type": "string",
+            "description": "Platform this update applies to.",
+            "enum": ["Windows", "Macintosh"]
+          },
+          "Versions": {
+            "type": "object",
+            "properties": {
+              "Roblox": {
+                "type": "string",
+                "description": "Roblox version this update targets."
+              },
+              "Software": {
+                "type": "string",
+                "description": "Software version released."
+              }
+            },
+            "required": ["Roblox", "Software"]
+          },
+          "Changelog": {
+            "type": "string",
+            "description": "Changelog text for this update."
+          }
+        },
+        "required": ["Platform", "Versions"]
+      },
+      "UpdatePlatformTimestamp": {
+        "type": "object",
+        "properties": {
+          "Timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp of the last update on this platform."
+          }
+        },
+        "required": ["Timestamp"]
+      },
+      "CheatUpdates": {
+        "type": "object",
+        "properties": {
+          "Identifier": {
+            "type": "string",
+            "description": "Unique cheat identifier."
+          },
+          "Update": {
+            "type": "object",
+            "properties": {
+              "Metadata": {
+                "type": "array",
+                "description": "List of historical update entries.",
+                "items": {
+                  "$ref": "#/components/schemas/UpdateMetadataEntry"
+                }
+              },
+              "Platforms": {
+                "type": "object",
+                "description": "Latest update timestamp per platform.",
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/UpdatePlatformTimestamp"
+                }
+              }
+            },
+            "required": ["Metadata", "Platforms"]
+          }
+        },
+        "required": ["Identifier", "Update"]
       },
       "UpdateRequest": {
         "type": "object",
@@ -508,15 +718,10 @@
                 "type": "string"
               }
             },
-            "required": [
-              "Roblox",
-              "Software"
-            ]
+            "required": ["Roblox", "Software"]
           }
         },
-        "required": [
-          "Versions"
-        ]
+        "required": ["Versions"]
       },
       "Error": {
         "type": "object",
@@ -528,68 +733,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "error",
-          "message"
-        ]
-      },
-      "Review": {
-        "type": "object",
-        "properties": {
-          "Identifier": {
-            "type": "string",
-            "description": "Unique review identifier."
-          },
-          "Author": {
-            "type": "string",
-            "description": "User ID of the review author."
-          },
-          "Rating": {
-            "type": "integer",
-            "description": "Review rating (1-5).",
-            "minimum": 1,
-            "maximum": 5
-          },
-          "Comment": {
-            "type": "string",
-            "description": "Review comment text."
-          },
-          "Timestamp": {
-            "type": "integer",
-            "description": "Unix timestamp of when the review was posted."
-          },
-          "Parent": {
-            "type": "string",
-            "description": "The cheat name that this review is for."
-          }
-        },
-        "required": [
-          "Identifier",
-          "Author",
-          "Rating",
-          "Comment",
-          "Timestamp",
-          "Parent"
-        ]
-      },
-      "Update": {
-        "type": "object",
-        "properties": {
-          "Platforms": {
-            "type": "object",
-            "description": "Update information by platform.",
-            "additionalProperties": {
-              "type": "object",
-              "properties": {
-                "Timestamp": {
-                  "type": "string",
-                  "format": "date-time",
-                  "description": "When the cheat was last updated on this platform."
-                }
-              }
-            }
-          }
-        }
+        "required": ["error", "message"]
       },
       "Cheat": {
         "type": "object",
@@ -601,25 +745,84 @@
             "type": "string"
           },
           "Tags": {
-            "type": "object"
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "Rank": { "type": "string" },
+                "Parent": { "type": "string" }
+              }
+            }
           },
           "Attributes": {
-            "type": "object"
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "Score": { "type": "integer" },
+                "Resellers": { "type": "boolean" },
+                "Type": { "type": "string" },
+                "Access": { "type": "string" },
+                "PricingModel": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "ReleaseDate": { "type": "string" }
+              }
+            }
           },
           "Cost": {
-            "type": "object"
+            "type": "object",
+            "additionalProperties": { "type": "string" }
           },
           "Visibility": {
-            "type": "object"
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "Website": { "type": "boolean" },
+                "Updates": { "type": "boolean" },
+                "Reviews": { "type": "boolean" },
+                "Settings": { "type": "boolean" }
+              }
+            }
           },
           "Links": {
-            "type": "object"
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "Website": { "type": "string" },
+                "Discord": { "type": "string" },
+                "Purchase": { "type": "string" }
+              }
+            }
           },
           "Platforms": {
-            "type": "object"
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "Detection": {
+                  "type": "object",
+                  "properties": {
+                    "Raw": { "type": "integer" },
+                    "Readable": { "type": "string" }
+                  }
+                },
+                "Tracked": { "type": "boolean" },
+                "Versions": {
+                  "type": "object",
+                  "properties": {
+                    "Software": { "type": "string" },
+                    "Roblox": { "type": "string" }
+                  }
+                }
+              }
+            }
           },
           "Update": {
-            "$ref": "#/components/schemas/Update"
+            "$ref": "#/components/schemas/CheatUpdates"
           },
           "Reviews": {
             "type": "array",
